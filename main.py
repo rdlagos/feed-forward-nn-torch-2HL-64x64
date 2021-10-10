@@ -76,3 +76,25 @@ with torch.no_grad():
 
 accuracy = correct/total
 print(f"Accuracy: {accuracy}")
+
+# Look at image processing
+from PIL import Image
+import numpy as np
+import PIL.ImageOps
+
+img = Image.open("firstTest.png")
+img = img.resize((28,28)) # need to resize the image before greyscale
+img.convert("L") # convert to grey scale, taken from PIL lib
+img = PIL.ImageOps.invert(img)
+
+plt.imshow(img)
+
+# turn image into numpy arr and then tensor torch to use in NN
+img = np.array(img) 
+img = img / 255 # to normalize the data (make between 0 and 1)
+image = torch.from_numpy(img) 
+image = image.float() #torch needs a float
+
+result = network.forward(image.view(-1, 28*28))
+print(torch.argmax(output))
+
